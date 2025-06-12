@@ -12,7 +12,7 @@ const Header: React.FC = () => {
             <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
               <Icon name="Music" className="text-purple-600" size={24} />
             </div>
-            <h1 className="text-2xl font-bold">MusicStream</h1>
+            <h1 className="text-2xl font-bold">kowalcore</h1>
           </div>
         </div>
 
