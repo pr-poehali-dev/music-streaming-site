@@ -24,3 +24,27 @@ export interface MusicState {
   currentTime: number;
   duration: number;
 }
+
+export interface Artist {
+  id: string;
+  name: string;
+  bio: string;
+  image: string;
+  albums: Album[];
+  followers: number;
+}
+
+export interface Album {
+  id: string;
+  name: string;
+  artist: string;
+  year: number;
+  cover: string;
+  tracks: Track[];
+}
+
+export interface SearchResults {
+  artists: Artist[];
+  albums: Album[];
+  tracks: Track[];
+}

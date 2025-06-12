@@ -2,8 +2,17 @@ import React from "react";
 import Icon from "@/components/ui/icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useMusicContext } from "@/context/MusicContext";
 
 const Header: React.FC = () => {
+  const { searchQuery, setSearchQuery, performSearch } = useMusicContext();
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    performSearch(query);
+  };
+
   return (
     <header className="bg-gradient-to-r from-purple-600 to-pink-500 text-white p-4 shadow-lg">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
@@ -26,6 +35,8 @@ const Header: React.FC = () => {
             <Input
               placeholder="Поиск музыки, исполнителей, альбомов..."
               className="pl-10 bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:bg-white/30"
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
           </div>
         </div>

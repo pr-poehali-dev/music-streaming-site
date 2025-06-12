@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Track, MusicState } from "@/types/music";
+import { Track, MusicState, Artist, Album, SearchResults } from "@/types/music";
+import { mockArtists, mockAlbums, mockTracks } from "@/data/mockData";
 
 interface MusicContextType extends MusicState {
   playTrack: (track: Track) => void;
@@ -7,6 +8,10 @@ interface MusicContextType extends MusicState {
   togglePlay: () => void;
   setVolume: (volume: number) => void;
   seekTo: (time: number) => void;
+  searchQuery: string;
+  searchResults: SearchResults;
+  setSearchQuery: (query: string) => void;
+  performSearch: (query: string) => void;
 }
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
@@ -29,6 +34,12 @@ export const MusicProvider: React.FC<MusicProviderProps> = ({ children }) => {
   const [volume, setVolumeState] = useState(0.7);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResults>({
+    artists: [],
+    albums: [],
+    tracks: [],
+  });
 
   const playTrack = (track: Track) => {
     setCurrentTrack(track);
@@ -51,6 +62,38 @@ export const MusicProvider: React.FC<MusicProviderProps> = ({ children }) => {
     setCurrentTime(time);
   };
 
+  const performSearch = (query: string) => {
+    if (!query.trim()) {
+      setSearchResults({ artists: [], albums: [], tracks: [] });
+      return;
+    }
+
+    const lowercaseQuery = query.toLowerCase();
+
+    const foundArtists = mockArtists.filter((artist) =>
+      artist.name.toLowerCase().includes(lowercaseQuery),
+    );
+
+    const foundAlbums = mockAlbums.filter(
+      (album) =>
+        album.name.toLowerCase().includes(lowercaseQuery) ||
+        album.artist.toLowerCase().includes(lowercaseQuery),
+    );
+
+    const foundTracks = mockTracks.filter(
+      (track) =>
+        track.title.toLowerCase().includes(lowercaseQuery) ||
+        track.artist.toLowerCase().includes(lowercaseQuery) ||
+        track.album.toLowerCase().includes(lowercaseQuery),
+    );
+
+    setSearchResults({
+      artists: foundArtists,
+      albums: foundAlbums,
+      tracks: foundTracks,
+    });
+  };
+
   const value: MusicContextType = {
     currentTrack,
     isPlaying,
@@ -62,6 +105,10 @@ export const MusicProvider: React.FC<MusicProviderProps> = ({ children }) => {
     togglePlay,
     setVolume,
     seekTo,
+    searchQuery,
+    searchResults,
+    setSearchQuery,
+    performSearch,
   };
 
   return (
